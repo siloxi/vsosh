@@ -25,18 +25,18 @@ class Status:
     # registration
     USER_EXIST = 5
 
-def login(username: str, password: str) -> int:
+def db_login(username: str, password: str) -> int:
     user = session.scalars(select(User).where(User.username == username)).first()
     if user is None:
         return Status.USER_NOT_FOUND
     if passlib.check_hash(user.passhash, password):
-        if user.totp is None:
+        if not bool(user.totp):
             return Status.SUCCESS
         else:
             return Status.TOTP_REQUIRED
     return Status.SECRET_INVALID
 
-def register(username: str, password: str) -> int:
+def db_register(username: str, password: str) -> int:
     user = session.scalars(select(User).where(User.username == username)).first()
     if user is not None:
         return Status.USER_EXIST
@@ -48,7 +48,7 @@ def confirm_totp(username: str, code: str) -> int:
     user = session.scalars(select(User).where(User.username == username)).first()
     if user is None:
         return Status.USER_NOT_FOUND
-    if check(code, user.totp):
+    if totp.check(int(code), user.totp):
         return Status.SUCCESS
     return Status.SECRET_INVALID
 '''

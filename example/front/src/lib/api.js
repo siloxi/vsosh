@@ -5,9 +5,10 @@ const API_AUTH_URL = process.env.NEXT_AUTH_API_URL || 'http://localhost:4000/api
 export const API_ENDPOINTS = {
   // Auth endpoints
   AUTH: {
-    LOGIN: `${API_AUTH_URL}/login`,
-    SIGNUP: `${API_AUTH_URL}/signup`,
-    LOGOUT: `${API_AUTH_URL}/logout`,
+    LOGIN: `${API_AUTH_URL}/login/`,
+    SIGNUP: `${API_AUTH_URL}/signup/`,
+    LOGOUT: `${API_AUTH_URL}/logout/`,
+    TOTP: `${API_AUTH_URL}/confirm-totp/`,
     // REFRESH_TOKEN: `${API_BASE_URL}/auth/refresh`,
     // FORGOT_PASSWORD: `${API_BASE_URL}/auth/forgot-password`,
     // RESET_PASSWORD: `${API_BASE_URL}/auth/reset-password`,

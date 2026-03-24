@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Trash2, Plus, Edit2 } from 'lucide-react';
+import { Trash2, Plus, Edit2, LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { API_ENDPOINTS } from '@/lib/api';
 
 export default function NotesGrid() {
+  const router = useRouter();
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -14,6 +16,17 @@ export default function NotesGrid() {
     title: '',
     content: '',
   });
+
+  const [username, setUsername] = useState("");
+  useEffect(() => {
+      console.log("cookie", document.cookie);
+      const match = document.cookie.match(/(?:^|; )username=([^;]*)/);
+      const username = match ? decodeURIComponent(match[1]) : "";
+      console.log(username);
+      if (!username) router.replace("/login");
+      setUsername(username); 
+    }, [router]);
+
 
   useEffect(() => {
     fetchNotes();
@@ -33,9 +46,7 @@ export default function NotesGrid() {
       }
 
       const data = await response.json();
-      console.log(data);
       setNotes([...data]);
-      console.log(notes);
       setError('');
     } catch (err) {
       console.error(err);
@@ -129,6 +140,20 @@ export default function NotesGrid() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-blue-100 p-8">
+      {/* Logout Button - top right */}
+      <button
+        onClick={() => router.push('/logout')}
+        title="Logout"
+        className="fixed right-6 top-6 z-50 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md flex items-center gap-2 transition-transform duration-150 transform hover:scale-105"
+      >
+        <LogOut className="w-4 h-4" />
+        Logout
+      </button>
+      {/* <h1 >//className="fixed right-6 top-6 z-50 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md flex items-center gap-2 transition-transform duration-150 transform hover:scale-105"> */}
+      <h1>
+      {username}
+      </h1>
+
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-12">
@@ -152,15 +177,6 @@ export default function NotesGrid() {
           Create Note
         </button>
 
-        {/* Logout Button */}
-        <button
-          onClick={() => handleOpenModal()}
-          className="mb-8 bg-gradient-to-r from-red-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg flex items-center gap-2"
-        >
-          <Plus className="w-5 h-5" />
-          Logout
-        </button>
-      
         {/* Loading State */}
         {isLoading ? (
           <div className="flex items-center justify-center py-12">

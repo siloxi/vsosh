@@ -16,7 +16,7 @@ class User(Base):
     username: Mapped[str] = mapped_column(String(36), unique=True)
     aidor: Mapped[str] = mapped_column(String(4)) # anti idor
     passhash: Mapped[Optional[str]] = None
-    totp: Mapped[Optional[int]] = None
+    totp: Mapped[Optional[str]] = None
     # addresses: Mapped[List["Address"]] = relationship(
     #      cascade="all, delete-orphan"
     # )

@@ -1,7 +1,7 @@
 import jwt
 import datetime
 
-SECRET = "secret"
+SECRET = "sefi3m2om2o3i23f0i2mf3efef323"
 ALGORITHM = "HS256"
 
 def jwtenc(data) -> str:
