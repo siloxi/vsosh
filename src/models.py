@@ -13,9 +13,18 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "users"
     id: Mapped[int] = mapped_column(primary_key=True)
-    username: Mapped[str] = mapped_column(String(30))
+    username: Mapped[str] = mapped_column(String(36), unique=True)
+    aidor: Mapped[str] = mapped_column(String(4)) # anti idor
     passhash: Mapped[Optional[str]] = None
     totp: Mapped[Optional[int]] = None
+    # addresses: Mapped[List["Address"]] = relationship(
+    #      cascade="all, delete-orphan"
+    # )
 
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, username={self.username!r})"
+
+class Group(Base):
+    __tablename__ = "groups"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(30))
